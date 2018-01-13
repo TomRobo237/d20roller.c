@@ -18,10 +18,11 @@ void helpmenu();
 
 int main(int argc, char **argv) {
 	int sides = 20, dice = 1, roll, c, option_index = 0; 
-	int high_flag = 0, plus = 0, add_total;
-	/*default sides to 20 unless specified through -s or --sides flag
+	int high_flag = 0, plus = 0, add_total = 0;
+	/* Default assumptions: 1 die, 20 sided, plus 0.
+	 * Roll is to store value returned from roll functions.
 	 * c is used to process getopt_long	 */
-	while  (1){
+	while  (1){ //processing arguments
 		static struct option long_options[] =
 			{
 				{"side", required_argument, 0, 's'},
@@ -45,7 +46,6 @@ int main(int argc, char **argv) {
 					else
 						{
 							sides = atoi(optarg);
-							printf("DEBUG: Setting sides to %d\n", sides);
 							break;
 						};
 				case 'd':
@@ -57,7 +57,6 @@ int main(int argc, char **argv) {
 					else
 						{
 							dice = atoi(optarg);
-							printf("DEBUG: Setting dice to %d\n", dice);
 							break;
 						}
 				case 'p':
@@ -69,12 +68,10 @@ int main(int argc, char **argv) {
 					else
 						{
 							plus = atoi(optarg);
-							printf("DEBUG: Setting Plus to %d\n", plus);
 							break;
 						}
 				case 'h':
 						high_flag = 1;
-						printf("DEBUG: Setting high_flag...\n");
 						break;
 				case '?':
 						helpmenu();
@@ -149,12 +146,13 @@ int numbercheck(char * check) {
 }
 
 void helpmenu() {
-	printf("Here is the help menu:\n\
+	printf("\
 USAGE: d20dieroller [OPTIONS]...\n\n\
 Possible options:\n\t\
 --side or -s: number of sides of the dice\n\t\
 --dice or -d: number of dice to roll\n\t\
 --high or -h: takes the highest die rolled\n\t\
+--plus or -p: adds number at end of roll\n\t\
 --help or -?: prints this help menu\n");
 	exit(EXIT_SUCCESS);
 }
