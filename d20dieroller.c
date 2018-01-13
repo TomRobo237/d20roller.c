@@ -1,6 +1,5 @@
 /* Thomas Miller
- * A C program to roll a d20
- * May add other dies / formulas
+ * A C program to roll dice for tabletop games.
  */
 
 #include <stdio.h>
@@ -14,7 +13,9 @@ int dieroller(int sides);
 int multidieroller(int dice, int sides);
 int highroll(int dice, int sides);
 int numbercheck(char * check);
+int menu();
 void helpmenu();
+
 
 int main(int argc, char **argv) {
 	int sides = 20, dice = 1, roll, c, option_index = 0; 
@@ -29,10 +30,11 @@ int main(int argc, char **argv) {
 				{"plus", required_argument, 0, 'p'},
 				{"dice", required_argument, 0, 'd'},
 				{"high", no_argument, 0, 'h'},
+				{"menu", no_argument, 0, 'm'},
 				{"help", no_argument,0, '?'},
 				{0,0,0,0}
 			};
-		c = getopt_long( argc, argv, "s:d:p:h?", long_options, &option_index);
+		c = getopt_long( argc, argv, "s:d:p:mh?", long_options, &option_index);
 		if ( c == -1 )
 			break;
 		switch (c)
@@ -73,12 +75,15 @@ int main(int argc, char **argv) {
 				case 'h':
 						high_flag = 1;
 						break;
+				case 'm':
+						menu();
+						break;
 				case '?':
 						helpmenu();
 						break;
 					}
 		}				
-	srand(time(NULL));
+	srand(time(NULL)); //Setting random seed based on current time.
 	if ( dice > 1 && high_flag == 1 )
 		{
 			roll = highroll( dice, sides );
@@ -145,6 +150,62 @@ int numbercheck(char * check) {
 	return 0;
 }
 
+int menu() {
+	srand(time(NULL));
+	int selection, q, sides, roll, dice;
+do {
+	printf("Menu mode:\nSelect an option:\n\
+1. Single die roll.\n\
+2. Multi die roll.\n\
+3. Highest die roll.\n\
+4. Exit\n\
+\nEnter Choice:");
+	while ( scanf("%d", &selection) == 0 ) {
+		printf("Invalid choice, try again!\nEnter Choice:");
+		while ((q=getchar())!='\n' && q!=EOF);
+	}
+	switch (selection)
+		{
+			case 1:
+				printf("Single Die!\nHow many sides? ");
+				while ( scanf("%d", &sides) == 0 ) {
+					printf("Invalid number, try again!\nEnter Sides:");
+					while ((q=getchar())!='\n' && q!=EOF);
+					}
+				roll = dieroller( sides );
+				printf("Rolled 1d%d: %d\n", sides, roll);
+				break;
+			case 2:
+				printf("Multi Die!\nHow many sides? ");
+				while ( scanf("%d", &sides) == 0 ) {
+					printf("Invalid number, try again!\nEnter Sides:");
+					while ((q=getchar())!='\n' && q!=EOF);
+					}
+				printf("How many dice? ");
+				while ( scanf("%d", &dice) == 0 ) {
+					printf("Invalid number, try again!\nEnter Dice:");
+					while ((q=getchar())!='\n' && q!=EOF);
+					}
+				roll = multidieroller( dice, sides );
+				break;
+			case 3:
+				printf("Highest Die!\nHow many sides? ");
+				while ( scanf("%d", &sides) == 0 ) {
+					printf("Invalid number, try again!\nEnter Sides:");
+					while ((q=getchar())!='\n' && q!=EOF);
+					}
+				printf("How many dice? ");
+				while ( scanf("%d", &dice) == 0 ) {
+					printf("Invalid number, try again!\nEnter Dice:");
+					while ((q=getchar())!='\n' && q!=EOF);
+					}
+				highroll( dice , sides);				
+			}
+	} while ( selection != 4 );
+	exit(EXIT_SUCCESS);
+}
+
+
 void helpmenu() {
 	printf("\
 USAGE: d20dieroller [OPTIONS]...\n\n\
@@ -153,6 +214,7 @@ Possible options:\n\t\
 --dice or -d: number of dice to roll\n\t\
 --high or -h: takes the highest die rolled\n\t\
 --plus or -p: adds number at end of roll\n\t\
+--menu or -m: menu tree mode\n\t\
 --help or -?: prints this help menu\n");
 	exit(EXIT_SUCCESS);
 }
