@@ -17,9 +17,7 @@ int numbercheck(char * check);
 int main(int argc, char **argv) {
 	int sides = 20, roll, c, option_index = 0; 
 	/*default sides to 20 unless specified through -s or --sides flag
-	 * c is used to process getopt_long, n is used to convert getopt arguments
-	 * into int variables.
-	 */
+	 * c is used to process getopt_long	 */
 	while  (1){
 		static struct option long_options[] =
 			{
@@ -34,7 +32,7 @@ int main(int argc, char **argv) {
 				case 's':
 					if (numbercheck(optarg) == 1)
 						{
-							fprintf ( stderr , "%s is not a number!\n", optarg);
+							fprintf ( stderr , "%s is not a number we can roll!\n", optarg);
 							exit(EXIT_FAILURE);
 						}
 					else
@@ -45,7 +43,7 @@ int main(int argc, char **argv) {
 						};
 			}
 		}				
-	srand( time(NULL));
+	srand(time(NULL));
 	roll = (dieroller(sides));
 	printf("Rolled d%d: %d\n", sides, roll);
 	return 0;
