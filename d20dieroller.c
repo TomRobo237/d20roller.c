@@ -16,7 +16,6 @@ int numbercheck(char * check);
 int menu();
 void helpmenu();
 
-
 int main(int argc, char **argv) {
 	int sides = 20, dice = 1, roll, c, option_index = 0; 
 	int high_flag = 0, plus = 0, add_total = 0;
@@ -99,7 +98,7 @@ int main(int argc, char **argv) {
 		};
 	if ( plus > 0 ) {
 		add_total = roll + plus;
-		printf("Rolled a %dd%d+%d:%d.\nTotal: %d\n", dice, sides, plus, roll, add_total);
+		printf("Rolled a %dd%d+%d: %d\nTotal: %d\n", dice, sides, plus, roll, add_total);
 	} 
 	return 0;
 }
@@ -115,7 +114,7 @@ int multidieroller(int dice, int sides) {
 	for ( i = 1 ; i <= dice ; i++)
 		{
 			printf("Rolling die %d:%d\n", i , 
-			rolled = ((rand() % sides) + 1 ));
+			rolled = dieroller(sides));
 			totalrolled = rolled + totalrolled; 
 		}
 		printf("Total roll:%d\n", totalrolled);
@@ -128,7 +127,7 @@ int highroll( int dice, int sides){
 	for ( i = 1 ; i <= dice ; i++)
 		{
 			printf("Rolling die %d:%d\n", i , 
-			rolled = ((rand() % sides) + 1 ));
+			rolled = dieroller( sides ));
 			if ( rolled > highestroll ) 
 				{
 					highestroll = rolled; 
@@ -152,69 +151,69 @@ int numbercheck(char * check) {
 
 int menu() {
 	srand(time(NULL));
+	printf("Menu mode:\n");
 	int selection, q, sides, roll, dice;
-do {
-	printf("Menu mode:\nSelect an option:\n\
-1. Single die roll.\n\
-2. Multi die roll.\n\
-3. Highest die roll.\n\
-4. Exit\n\
-\nEnter Choice:");
-	while ( scanf("%d", &selection) == 0 ) {
-		printf("Invalid choice, try again!\nEnter Choice:");
-		while ((q=getchar())!='\n' && q!=EOF);
-	}
-	switch (selection)
-		{
-			case 1:
-				printf("Single Die!\nHow many sides? ");
-				while ( scanf("%d", &sides) == 0 ) {
-					printf("Invalid number, try again!\nEnter Sides:");
-					while ((q=getchar())!='\n' && q!=EOF);
-					}
-				roll = dieroller( sides );
-				printf("Rolled 1d%d: %d\n", sides, roll);
-				break;
-			case 2:
-				printf("Multi Die!\nHow many sides? ");
-				while ( scanf("%d", &sides) == 0 ) {
-					printf("Invalid number, try again!\nEnter Sides:");
-					while ((q=getchar())!='\n' && q!=EOF);
-					}
-				printf("How many dice? ");
-				while ( scanf("%d", &dice) == 0 ) {
-					printf("Invalid number, try again!\nEnter Dice:");
-					while ((q=getchar())!='\n' && q!=EOF);
-					}
-				roll = multidieroller( dice, sides );
-				break;
-			case 3:
-				printf("Highest Die!\nHow many sides? ");
-				while ( scanf("%d", &sides) == 0 ) {
-					printf("Invalid number, try again!\nEnter Sides:");
-					while ((q=getchar())!='\n' && q!=EOF);
-					}
-				printf("How many dice? ");
-				while ( scanf("%d", &dice) == 0 ) {
-					printf("Invalid number, try again!\nEnter Dice:");
-					while ((q=getchar())!='\n' && q!=EOF);
-					}
-				highroll( dice , sides);				
-			}
-	} while ( selection != 4 );
+	do {
+		printf("\nSelect an option:\n\
+	1. Single die roll.\n\
+	2. Multi die roll.\n\
+	3. Highest die roll.\n\
+	4. Exit\n\
+	\nEnter Choice:");
+		while ( scanf("%d", &selection) == 0 ) {
+			printf("Invalid choice, try again!\nEnter Choice:");
+			while ((q=getchar())!='\n' && q!=EOF);
+		}
+		switch (selection)
+			{
+				case 1:
+					printf("Single Die!\nHow many sides? ");
+					while ( scanf("%d", &sides) == 0 ) {
+						printf("Invalid number, try again!\nEnter Sides:");
+						while ((q=getchar())!='\n' && q!=EOF);
+						}
+					roll = dieroller( sides );
+					printf("Rolled 1d%d: %d\n", sides, roll);
+					break;
+				case 2:
+					printf("Multi Die!\nHow many sides? ");
+					while ( scanf("%d", &sides) == 0 ) {
+						printf("Invalid number, try again!\nEnter Sides:");
+						while ((q=getchar())!='\n' && q!=EOF);
+						}
+					printf("How many dice? ");
+					while ( scanf("%d", &dice) == 0 ) {
+						printf("Invalid number, try again!\nEnter Dice:");
+						while ((q=getchar())!='\n' && q!=EOF);
+						}
+					roll = multidieroller( dice, sides );
+					break;
+				case 3:
+					printf("Highest Die!\nHow many sides? ");
+					while ( scanf("%d", &sides) == 0 ) {
+						printf("Invalid number, try again!\nEnter Sides:");
+						while ((q=getchar())!='\n' && q!=EOF);
+						}
+					printf("How many dice? ");
+					while ( scanf("%d", &dice) == 0 ) {
+						printf("Invalid number, try again!\nEnter Dice:");
+						while ((q=getchar())!='\n' && q!=EOF);
+						}
+					highroll( dice , sides);				
+				}
+		} while ( selection != 4 );
 	exit(EXIT_SUCCESS);
 }
-
 
 void helpmenu() {
 	printf("\
 USAGE: d20dieroller [OPTIONS]...\n\n\
-Possible options:\n\t\
---side or -s: number of sides of the dice\n\t\
---dice or -d: number of dice to roll\n\t\
---high or -h: takes the highest die rolled\n\t\
---plus or -p: adds number at end of roll\n\t\
---menu or -m: menu tree mode\n\t\
---help or -?: prints this help menu\n");
+Possible options:\n\
+\t--side or -s: number of sides of the dice\n\
+\t--dice or -d: number of dice to roll\n\
+\t--high or -h: takes the highest die rolled\n\
+\t--plus or -p: adds number at end of roll\n\
+\t--menu or -m: menu tree mode\n\
+\t--help or -?: prints this help menu\n");
 	exit(EXIT_SUCCESS);
 }
